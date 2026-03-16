@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法舟同航 - 法律全文-D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Microsoft Yahei", sans-serif;
+            background-color: #f5f7fa;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .top-bg {
+            background-color: #d0e8ff;
+            height: 100px;
+            width: 100%;
+            position: relative;
+        }
+        .header-icon {
+            position: absolute;
+            left: 20px;
+            top: 70%;
+            transform: translateY(-50%);
+            font-size: 60px;
+        }
+        .header-logo {
+            width: 80px;
+            height: auto;
+        }
+        .header-date {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 16px;
+            color: #333;
+        }
+        /* 轮播图样式（和首页完全一致，必保留） */
+        .carousel-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            height: 350px;
+            overflow: hidden;
+            margin-bottom: 0 !important;
+        }
+        .carousel-slide {
+            display: flex;
+            width: 400%;
+            height: 100%;
+            transition: transform 0.5s ease;
+        }
+        .slide-group {
+            display: flex;
+            width: 100%;
+        }
+        .carousel-item {
+            width: 50%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0,0,0,0.3);
+            color: #fff;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .prev-btn {
+            left: 10px;
+        }
+        .next-btn {
+            right: 10px;
+        }
+        .carousel-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        .indicator.active {
+            background-color: #fff;
+        }
+        /* 导航栏样式 */
+        .nav-bar {
+            background-color: #5c5249;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 20px;
+            margin: 0 !important;
+        }
+        .nav-item {
+            color: #fff;
+            text-decoration: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .nav-item:hover, .nav-item.active {
+            background-color: #4a4139;
+        }
+        /* 法律内容样式 */
+        .page-container {
+            font-family: "SimSun", 宋体;
+            line-height: 2;
+            max-width: 1000px;
+            margin: 0 auto !important;
+            padding: 40px 50px;
+            background-color: #fff;
+            min-height: calc(100vh - 60px);
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        .law-title {
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 1em;
+            color: #1a5276;
+        }
+        .title-wrapper {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+        .main-title {
+            font-size: 38px;
+            font-weight: bold;
+            color: #1a5276;
+            padding: 15px 0;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            width: 100%;
+            display: block;
+        }
+        .sub-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            color: #2980b9;
+        }
+        .sub-info {
+            text-align: center;
+            font-size: 18px;
+            font-weight: normal;
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: #666;
+            font-style: italic;
+        }
+        .chapter-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 40px 0 25px;
+            color: #1a5276;
+            position: relative;
+        }
+        .chapter-title::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 2px;
+            background-color: #3498db;
+            margin: 10px auto 0;
+        }
+        .catalog {
+            margin: 0 auto 30px;
+            padding-left: 2em;
+            list-style: none;
+            max-width: 600px;
+        }
+        .catalog li {
+            margin: 8px 0;
+            text-align: left;
+            color: #444;
+            padding: 2px 0;
+        }
+        .law-content {
+            font-weight: normal;
+            padding-left: 1em;
+            display: block;
+            margin: 15px 0;
+            color: #444;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f4f8;
+        }
+        .law-paragraph {
+            text-indent: 2em;
+            margin: 10px 0;
+            font-weight: normal;
+            color: #444;
+        }
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .page-container {
+                padding: 20px 25px;
+                margin: 0 15px 15px !important;
+            }
+            .main-title {
+                font-size: 28px;
+            }
+            .sub-title {
+                font-size: 22px;
+            }
+            .nav-item {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+            .carousel-container {
+                height: 200px !important;
+            }
+        }
+        .bottom-bg {
+            background-color: #d0e8ff;
+            height: 50px;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .footer {
+            background-color: #d0e8ff;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+            opacity: 0;
+            transition: opacity 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .footer-logo {
+            width: 180px;
+            height: auto;
+            margin-right: 10px;
+        }
+        .footer.show {
+            opacity: 1;
+        }
+        .breadcrumb{max-width:1100px;margin:18px auto;color:#666;padding:0 10px}
+        .breadcrumb hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bg">
+        <div class="header-icon">
+            <img src="photos/logo-1.png" alt="Logo" class="header-logo">
+        </div>
+        <div class="header-date" id="date"></div>
+    </div>
+    <!-- 轮播图（导航栏上方，必在最顶部） -->
+    <div class="carousel-container">
+        <div class="carousel-slide">
+            <div class="slide-group">
+                <img src="photos/1.jpg" alt="活动合照" class="carousel-item">
+                <img src="photos/2.jpg" alt="普法讲解" class="carousel-item">
+            </div>
+            <div class="slide-group">
+                <img src="photos/2.jpg" alt="普法讲解" class="carousel-item">
+                <img src="photos/3.jpg" alt="普法讲解" class="carousel-item">
+            </div>
+            <div class="slide-group">
+                <img src="photos/3.jpg" alt="普法讲解" class="carousel-item">
+                <img src="photos/5.jpg" alt="普法宣传" class="carousel-item">
+            </div>
+            <div class="slide-group">
+                <img src="photos/5.jpg" alt="普法宣传" class="carousel-item">
+                <img src="photos/1.jpg" alt="活动合照" class="carousel-item">
+            </div>
+        </div>
+        <button class="carousel-btn prev-btn">&lt;</button>
+        <button class="carousel-btn next-btn">&gt;</button>
+        <div class="carousel-indicators">
+            <div class="indicator active"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <div class="nav-bar">
+        <a href="file:///d:/Code/start/raw.html" class="nav-item">首页</a>
+        <a href="file:///d:/Code/start/law.html" class="nav-item active">法律全文</a>
+        <a href="file:///d:/Code/start/three.html" class="nav-item">普法动态</a>
+        <a href="file:///d:/Code/start/message.html" class="nav-item">留言咨询</a>
+        <a href="file:///d:/Code/start/aboutus.html" class="nav-item">关于我们</a>
+    </div>
+
+    <div class="breadcrumb">
+        当前位置：法律全文
+        <hr>
+    </div>
+    
+    <!-- 法律全文内容 -->
+    <div class="page-container">
+        <div class="title-wrapper">
+            <div class="main-title">法舟同航法律普及</div>
+        </div>
+        <div class="sub-title">中华人民共和国反电信网络诈骗法</div>
+        <div class="sub-info">（2022年9月2日第十三届全国人民代表大会常务委员会第三十六次会议通过）</div>
+        <div class="chapter-title">目录</div>
+        <ul class="catalog">
+            <li>第一章 总则</li>
+            <li>第二章 预防与教育</li>
+            <li>第三章 监测与防范</li>
+            <li>第四章 侦查与处置</li>
+            <li>第五章 法律责任</li>
+            <li>第六章 附则</li>
+        </ul>
+        <div class="chapter-title">第一章 总则</div>
+        <div class="law-content">
+            <span class="law-title">第一条</span>
+            为了预防、遏制和惩治电信网络诈骗活动，加强反电信网络诈骗工作，保护公民和组织的合法权益，维护社会稳定和国家安全，根据宪法，制定本法。
+        </div>
+        <div class="law-content">
+            <span class="law-title">第二条</span>
+            本法所称电信网络诈骗，是指以非法占有为目的，利用电信网络技术手段，通过远程、非接触等方式，诈骗公私财物的行为。
+        </div>
+        <div class="law-content">
+            <span class="law-title">第三条</span>
+            打击治理在中华人民共和国境内实施的电信网络诈骗活动或者中华人民共和国公民在境外实施的电信网络诈骗活动，适用本法。
+            <p class="law-paragraph">
+            境外的组织、个人针对中华人民共和国境内实施电信网络诈骗活动的，或者为他人针对境内实施电信网络诈骗活动提供产品、服务等帮助的，依照本法有关规定处理和追究责任。
+            </p>
+        </div>
+        <div class="law-content">
+            <span class="law-title">第四条</span>
+        反电信网络诈骗工作坚持以人民为中心，统筹发展和安全；坚持系统观念、法治思维，注重源头治理、综合治理；坚持齐抓共管、群防群治，全面落实打防管控各项措施，加强社会宣传教育防范；坚持精准防治，保障正常生产经营活动和群众生活便利。
+        </div> 
+        <div class="law-content">
+            <span class="law-title">第五条</span>
+            反电信网络诈骗工作应当依法进行，维护公民和组织的合法权益。
+            <p class="law-paragraph">
+            有关部门和单位、个人应当对在反电信网络诈骗工作过程中知悉的国家秘密、商业秘密和个人隐私、个人信息予以保密。
+            </p>    
+        </div>
+        <div class="law-content">
+    <span class="law-title">第六条</span>
+    国务院建立反电信网络诈骗工作机制，统筹协调打击治理工作。
+    <p class="law-paragraph">地方各级人民政府组织领导本行政区域内反电信网络诈骗工作，确定反电信网络诈骗目标任务和工作机制，开展综合治理。</p>
+    <p class="law-paragraph">公安机关牵头负责反电信网络诈骗工作，金融、电信、网信、市场监管等有关部门依照职责履行监管主体责任，负责本行业领域反电信网络诈骗工作。</p>
+    <p class="law-paragraph">人民法院、人民检察院发挥审判、检察职能作用，依法防范、惩治电信网络诈骗活动。</p>
+    <p class="law-paragraph">电信业务经营者、银行业金融机构、非银行支付机构、互联网服务提供者承担风险防控责任，建立反电信网络诈骗内部控制机制和安全责任制度，加强新业务涉诈风险安全评估。</p>
+</div>
+        <div class="law-content">
+            <span class="law-title">第七条</span>
+            有关部门、单位在反电信网络诈骗工作中应当密切协作，实现跨行业、跨地域协同配合、快速联动，加强专业队伍建设，有效打击治理电信网络诈骗活动。
+        </div>
+        <div class="law-content">
+            <span class="law-title">第八条</span>
+            各级人民政府和有关部门应当加强反电信网络诈骗宣传，普及相关法律和知识，提高公众对各类电信网络诈骗方式的防骗意识和识骗能力。
+            <p class="law-paragraph">
+            教育行政、市场监管、民政等有关部门和村民委员会、居民委员会，应当结合电信网络诈骗受害群体的分布等特征，加强对老年人、青少年等群体的宣传教育，增强反电信网络诈骗宣传教育的针对性、精准性，开展反电信网络诈骗宣传教育进学校、进企业、进社区、进农村、进家庭等活动。
+            </p>
+            <p class="law-paragraph">
+            各单位应当加强内部防范电信网络诈骗工作，对工作人员开展防范电信网络诈骗教育；个人应当加强电信网络诈骗防范意识。单位、个人应当协助、配合有关部门依照本法规定开展反电信网络诈骗工作。
+            </p>
+        </div>
+        <div class="chapter-title">第二章 电信治理</div>
+        <div class="law-content">
+            <span class="law-title">第九条</span>
+            电信业务经营者应当依法全面落实电话用户真实身份信息登记制度。
+            <p class="law-paragraph">
+            基础电信企业和移动通信转售企业应当承担对代理商落实电话用户实名制管理责任，在协议中明确代理商实名制登记的责任和有关违约处置措施。
+            </p>
+        </div>
+        <div class="law-content">
+            <span class="law-title">第十条</span>
+            办理电话卡不得超出国家有关规定限制的数量。
+             <p class="law-paragraph">
+            对经识别存在异常办卡情形的，电信业务经营者有权加强核查或者拒绝办卡。具体识别办法由国务院电信主管部门制定。
+             </p>
+             <p class="law-paragraph">
+            国务院电信主管部门组织建立电话用户开卡数量核验机制和风险信息共享机制，并为用户查询名下电话卡信息提供便捷渠道。
+             </p>
+        </div>
+        <div class="law-content">
+            <span class="law-title">第十一条</span>
+            电信业务经营者对监测识别的涉诈异常电话卡用户应当重新进行实名核验，根据风险等级采取有区别的、相应的核验措施。对未按规定核验或者核验未通过的，电信业务经营者可以限制、暂停有关电话卡功能。
+        </div>
+        <div class="law-content">
+            <span class="law-title">第十二条</span>
+            电信业务经营者建立物联网卡用户风险评估制度，评估未通过的，不得向其销售物联网卡；严格登记物联网卡用户身份信息；采取有效技术措施限定物联网卡开通功能、使用场景和适用设备。
+            <p class="law-paragraph">
+            电信业务经营者对物联网卡的使用建立监测预警机制。对存在异常使用情形的，应当采取暂停服务、重新核验身份和使用场景或者其他合同约定的处置措施。
+            </p>
+        </div>
+        <div class="law-content">
+            <span class="law-title">第十三条</span>
+        电信业务经营者应当规范真实主叫号码传送和电信线路出租，对改号电话进行封堵拦截和溯源核查。
+        <p class="law-paragraph">
+        电信业务经营者应当严格规范国际通信业务出入口局主叫号码传送，真实、准确向用户提示来电号码所属国家或者地区，对网内和网间虚假主叫、不规范主叫进行识别、拦截。
+        </p>
+        </div> 
+        <div class="law-content">
+            <span class="law-title">第十四条</span>
+            任何单位和个人不得非法制造、买卖、提供或者使用下列设备、软件：
+            <p class="law-paragraph">
+            （一）电话卡批量插入设备；
+            </p>   
+            <p class="law-paragraph">
+            （二）具有改变主叫号码、虚拟拨号、互联网电话违规接入公用电信网络等功能的设备、软件；
+            </p>   
+            <p class="law-paragraph">
+            （三）批量账号、网络地址自动切换系统，批量接收提供短信验证、语音验证的平台；
+            </p>   
+            <p class="law-paragraph">
+            （四）其他用于实施电信网络诈骗等违法犯罪的设备、软件。
+            </p>   
+            <p class="law-paragraph">
+            电信业务经营者、互联网服务提供者应当采取技术措施，及时识别、阻断前款规定的非法设备、软件接入网络，并向公安机关和相关行业主管部门报告。
+            </p>    
+        </div>
+    </div>
+    <div class="bottom-bg"></div>
+    <div class="footer" id="footer">
+        <img src="photos/logo-2.jpg" alt="Logo2" class="footer-logo">
+        <span>来源：中国石油大学（华东）法舟同航实践队</span>
+    </div>
+
+    <!-- 轮播图JS（必须放在body最后，确保元素加载完成） -->
+    <script>
+        // 强制获取元素，避免加载问题
+        const slide = document.querySelector('.carousel-slide');
+        const indicators = document.querySelectorAll('.indicator');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        let currentIndex = 0;
+        const totalSlides = 4;
+
+        if (slide && indicators && prevBtn && nextBtn) {
+            function goToSlide(index) {
+                slide.style.transform = `translateX(-${index * 25}%)`;
+                indicators.forEach((indicator, i) => {
+                    indicator.classList.toggle('active', i === index);
+                });
+                currentIndex = index;
+            }
+            // 下一张
+            nextBtn.addEventListener('click', () => {
+                const nextIndex = (currentIndex + 1) % totalSlides;
+                goToSlide(nextIndex);
+            });
+            // 上一张
+            prevBtn.addEventListener('click', () => {
+                const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                goToSlide(prevIndex);
+            });
+            // 指示器点击
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    goToSlide(index);
+                });
+            });
+            // 自动轮播
+            setInterval(() => {
+                const nextIndex = (currentIndex + 1) % totalSlides;
+                goToSlide(nextIndex);
+            }, 4000);
+        }
+        // 更新日期
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        document.getElementById('date').textContent = now.toLocaleDateString('zh-CN', options);
+        // 滚动到底部显示版权和背景
+        const footer = document.getElementById('footer');
+        const bottomBg = document.querySelector('.bottom-bg');
+        window.addEventListener('scroll', () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10) {
+                footer.classList.add('show');
+                bottomBg.style.opacity = 1;
+            } else {
+                footer.classList.remove('show');
+                bottomBg.style.opacity = 0;
+            }
+        });
+    </script>
+</body>
+</html>
